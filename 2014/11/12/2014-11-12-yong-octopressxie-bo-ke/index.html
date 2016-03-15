@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>用Octopress写博客 | Ben&#39;s Homepage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从昨天晚上折腾到现在终于把Octopress的环境搭好了，网上有很多搭建环境的例子，无奈有些说的不是很明确，东拼西凑了一些教程，这些都非本人原创，把我的经历给大家分享下，让大家少走弯路。
+最近产生了写博客的想法，一方面想把自己的开发经历和技术经验分享出来，另一方面也希望在写作的过程中能加深自己的了解。个人比较喜欢喵神和唐巧的技术博客的风格，喵神的Blog模板没有尝试，主要参考唐巧的文章，完成了本文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Octopress写博客">
+<meta property="og:url" content="http://yoursite.com/2014/11/12/2014-11-12-yong-octopressxie-bo-ke/index.html">
+<meta property="og:site_name" content="Ben's Homepage">
+<meta property="og:description" content="从昨天晚上折腾到现在终于把Octopress的环境搭好了，网上有很多搭建环境的例子，无奈有些说的不是很明确，东拼西凑了一些教程，这些都非本人原创，把我的经历给大家分享下，让大家少走弯路。
+最近产生了写博客的想法，一方面想把自己的开发经历和技术经验分享出来，另一方面也希望在写作的过程中能加深自己的了解。个人比较喜欢喵神和唐巧的技术博客的风格，喵神的Blog模板没有尝试，主要参考唐巧的文章，完成了本文">
+<meta property="og:updated_time" content="2015-01-05T01:13:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用Octopress写博客">
+<meta name="twitter:description" content="从昨天晚上折腾到现在终于把Octopress的环境搭好了，网上有很多搭建环境的例子，无奈有些说的不是很明确，东拼西凑了一些教程，这些都非本人原创，把我的经历给大家分享下，让大家少走弯路。
+最近产生了写博客的想法，一方面想把自己的开发经历和技术经验分享出来，另一方面也希望在写作的过程中能加深自己的了解。个人比较喜欢喵神和唐巧的技术博客的风格，喵神的Blog模板没有尝试，主要参考唐巧的文章，完成了本文">
+  
+    <link rel="alternate" href="/atom.xml" title="Ben&#39;s Homepage" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Ben&#39;s Homepage</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-11-12-yong-octopressxie-bo-ke" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/12/2014-11-12-yong-octopressxie-bo-ke/" class="article-date">
+  <time datetime="2014-11-12T08:14:34.000Z" itemprop="datePublished">2014-11-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/非技术类/">非技术类</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      用Octopress写博客
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从昨天晚上折腾到现在终于把Octopress的环境搭好了，网上有很多搭建环境的例子，无奈有些说的不是很明确，东拼西凑了一些教程，这些都非本人原创，把我的经历给大家分享下，让大家少走弯路。</p>
+<p>最近产生了写博客的想法，一方面想把自己的开发经历和技术经验分享出来，另一方面也希望在写作的过程中能加深自己的了解。个人比较喜欢<a href="http://onevcat.com/" target="_blank" rel="external">喵神</a>和<a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a>的技术博客的风格，喵神的Blog模板没有尝试，主要参考唐巧的<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" target="_blank" rel="external">文章</a>，完成了本文的写作环境的搭建。</p>
+<p>###搭建<br>搭建环境主要参考这里<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" target="_blank" rel="external">http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/</a>，大家直接跳过去看就好了。主要说说我的经验，ruby的环境不需要1.9.3的，Yosemite默认的2.0是Ok的，所以没必要纠结地去装gcc 4.2，直接装Octopress就行。<code>gem install bundler</code>相当地慢，曾经就因为这个放弃了一次，这个没被墙，就是慢，耐心等一下。</p>
+<p>文章里漏掉的一点就是设置octopress与github-pages的连接，第一次发布，在执行<code>rake deploy</code>之前，要先执行<code>rake setup_github_pages</code>，在输入提示中输入你的github-pages地址，比如我的<code>git@github.com:wuwen1030/wuwen1030.github.io.git</code>。大家在配置好，最好就不要手动去改github-pages的内容啦，这可能会导致发布失败噢，原因就是octopress的发布内容和github服务端的内容不一致造成的，deploy 时明明看到 git pull… 了，没搞懂，大家如果知道请指教一下。</p>
+<p>deploy之后，发现和大神的Blog还是很不一样嘛，不知道从哪儿窜出来的各种英文，现在需要配置一下，定制自己的模板啦。</p>
+<p>###配置<br>唐巧的文章配置这块写的不是太细，谷歌，DuckDuckGo被各种屏蔽，只好求助度娘，配置主要是参考<a href="http://www.cnblogs.com/oec2003/archive/2013/05/31/3109577.html" target="_blank" rel="external">http://www.cnblogs.com/oec2003/archive/2013/05/31/3109577.html</a>。大家自行阅读吧，写的很细了。配置这块还有很多可研究的，待以后深入研究再补充上来。</p>
+<p>至此，你已经得到了一个看起来很酷的blog模板了，可以拿出来装一装了（Octopress号称就是给Hacker用的么），唯一的问题就是访问速度很慢，不过没关系，已经有解决方案了，拿来主义的博主再次发出链接大招<a href="http://blog.devtang.com/blog/2014/06/02/use-gitcafe-to-host-blog/" target="_blank" rel="external">http://blog.devtang.com/blog/2014/06/02/use-gitcafe-to-host-blog/</a>，一步步按照文章里的来，像我这样的小白也能搞好。感谢方校长的GFW成功阻击境外反动势力对我国的渗透，即使切到GitCafe你的Blog访问速度依然很慢，查看你主页的源码，你会看到这个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;link href=&quot;//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</span><br><span class="line">&lt;link href=&quot;//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>问题就在这里，替换掉Google的jquery和font链接，打开/source/index.html，做如下替换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 替换jquery ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js--&gt;</span><br><span class="line">&lt;script src=&quot;http://ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>打开 source/_includes/custom/head.html，替换成如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Fonts from Google&quot;s Web font directory at http://google.com/webfonts --&gt;</span><br><span class="line">&lt;link href=&quot;http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</span><br><span class="line">&lt;link href=&quot;http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>###后话<br>完成这些之后，你就可以像博主一样使用优雅的<strong>Markdown</strong>在这写作，推荐一个不错的Mac开源<a href="http://macdown.uranusjr.com/" target="_blank" rel="external">Markdown编辑工具</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/12/2014-11-12-yong-octopressxie-bo-ke/" data-id="cilss6jx6000092v23ljp3gns" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/17/2014-11-17-shi-yong-calayerde-maskdong-hua/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用CALayer的mask动画
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS开发/">iOS开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/非技术类/">非技术类</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/03/15/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/20/2015-05-20-at-ibdesignable-suo-jian-ji-suo-de-de-custom-view/">@IBDesignable-所见即所得的Custom View</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/">工欲善其事，必先利其器-我的XCode插件</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/17/2014-11-17-shi-yong-calayerde-maskdong-hua/">使用CALayer的mask动画</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/12/2014-11-12-yong-octopressxie-bo-ke/">用Octopress写博客</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 BenXia<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
