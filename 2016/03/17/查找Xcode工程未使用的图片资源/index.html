@@ -57,24 +57,16 @@
 
 
 
-<meta name="description" content="XCode为我们提供了一个相对完善的集成开发环境(IDE)，但它仍有诸多不便，在很多地方做的不是那么好，所幸Apple提供了插件编写功能。通过使用多种插件，可以显著提高我们的开发效率。
-KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称感到烦恼？是否也曾反复把图片名拷贝到代码里？是否遇到过把图片名大小写搞错而导致真机不能正常显示图片资源？那么这款神器绝">
+<meta name="description" content="背景随着APP的功能越来越丰富，安装包的尺寸也在快速增长。像16G这种在往日非常大的存储空间，现在也越来越捉襟见肘，安装包的大小已经成为衡量APP质量的指标之一。分析iOS的安装包文件.ipa文件我们可以看到，图片资源在安装包中还是占了比较大的比重，通过减少图片的总尺寸可以达到我们的目的。方法有两个，一是压缩单张图片的尺寸，比较著名的有imageOptim，二是减少图片的数量。实际上在我们的开发过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="工欲善其事，必先利其器-我的XCode插件">
-<meta property="og:url" content="http://yoursite.com/2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/index.html">
+<meta property="og:title" content="查找Xcode工程未使用的图片资源">
+<meta property="og:url" content="http://yoursite.com/2016/03/17/查找Xcode工程未使用的图片资源/index.html">
 <meta property="og:site_name" content="Ben's Homepage">
-<meta property="og:description" content="XCode为我们提供了一个相对完善的集成开发环境(IDE)，但它仍有诸多不便，在很多地方做的不是那么好，所幸Apple提供了插件编写功能。通过使用多种插件，可以显著提高我们的开发效率。
-KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称感到烦恼？是否也曾反复把图片名拷贝到代码里？是否遇到过把图片名大小写搞错而导致真机不能正常显示图片资源？那么这款神器绝">
-<meta property="og:image" content="https://raw.github.com/ksuther/KSImageNamed-Xcode/master/screenshot.gif">
-<meta property="og:image" content="https://raw.github.com/onevcat/VVDocumenter-Xcode/master/ScreenShot.gif">
-<meta property="og:image" content="https://raw.githubusercontent.com/markohlebar/Peckham/develop/Misc/Peckham.gif">
-<meta property="og:image" content="https://github.com/kattrali/cocoadocs-xcode-plugin/raw/master/menu.png">
-<meta property="og:updated_time" content="2016-03-15T03:36:18.000Z">
+<meta property="og:description" content="背景随着APP的功能越来越丰富，安装包的尺寸也在快速增长。像16G这种在往日非常大的存储空间，现在也越来越捉襟见肘，安装包的大小已经成为衡量APP质量的指标之一。分析iOS的安装包文件.ipa文件我们可以看到，图片资源在安装包中还是占了比较大的比重，通过减少图片的总尺寸可以达到我们的目的。方法有两个，一是压缩单张图片的尺寸，比较著名的有imageOptim，二是减少图片的数量。实际上在我们的开发过">
+<meta property="og:updated_time" content="2016-03-17T03:57:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="工欲善其事，必先利其器-我的XCode插件">
-<meta name="twitter:description" content="XCode为我们提供了一个相对完善的集成开发环境(IDE)，但它仍有诸多不便，在很多地方做的不是那么好，所幸Apple提供了插件编写功能。通过使用多种插件，可以显著提高我们的开发效率。
-KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称感到烦恼？是否也曾反复把图片名拷贝到代码里？是否遇到过把图片名大小写搞错而导致真机不能正常显示图片资源？那么这款神器绝">
-<meta name="twitter:image" content="https://raw.github.com/ksuther/KSImageNamed-Xcode/master/screenshot.gif">
+<meta name="twitter:title" content="查找Xcode工程未使用的图片资源">
+<meta name="twitter:description" content="背景随着APP的功能越来越丰富，安装包的尺寸也在快速增长。像16G这种在往日非常大的存储空间，现在也越来越捉襟见肘，安装包的大小已经成为衡量APP质量的指标之一。分析iOS的安装包文件.ipa文件我们可以看到，图片资源在安装包中还是占了比较大的比重，通过减少图片的总尺寸可以达到我们的目的。方法有两个，一是压缩单张图片的尺寸，比较著名的有imageOptim，二是减少图片的数量。实际上在我们的开发过">
 
 
 
@@ -92,7 +84,7 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
   };
 </script>
 
-  <title> 工欲善其事，必先利其器-我的XCode插件 | Ben's Homepage </title>
+  <title> 查找Xcode工程未使用的图片资源 | Ben's Homepage </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -222,7 +214,7 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
             
             
               
-                工欲善其事，必先利其器-我的XCode插件
+                查找Xcode工程未使用的图片资源
               
             
           </h1>
@@ -234,8 +226,8 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-01-05T09:11:18+08:00" content="2015-01-05">
-              2015-01-05
+            <time itemprop="dateCreated" datetime="2016-03-17T11:49:36+08:00" content="2016-03-17">
+              2016-03-17
             </time>
           </span>
 
@@ -264,8 +256,8 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/" itemprop="commentsCount"></span>
+                <a href="/2016/03/17/查找Xcode工程未使用的图片资源/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/17/查找Xcode工程未使用的图片资源/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -287,15 +279,48 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
       
 
       
-        <p>XCode为我们提供了一个相对完善的集成开发环境(IDE)，但它仍有诸多不便，在很多地方做的不是那么好，所幸Apple提供了插件编写功能。通过使用多种插件，可以显著提高我们的开发效率。</p>
-<h3 id="KSImageNamed"><a href="#KSImageNamed" class="headerlink" title="KSImageNamed"></a><a href="https://github.com/ksuther/KSImageNamed-Xcode" target="_blank" rel="external">KSImageNamed</a></h3><p>你是否曾为<code>[UIImage imageNamed:]</code>无法准确拼出图片名称感到烦恼？是否也曾反复把图片名拷贝到代码里？是否遇到过把图片名大小写搞错而导致真机不能正常显示图片资源？那么这款神器绝对适合你，而且是完全免费的哟。经博主测试，用了<a href="https://github.com/ksuther/KSImageNamed-Xcode" target="_blank" rel="external">KSImageNamed</a>，手不酸了，眼不疼了，一口气写100行。</p>
-<p><img src="https://raw.github.com/ksuther/KSImageNamed-Xcode/master/screenshot.gif" alt="Screenshot"></p>
-<h3 id="VVDocumenter"><a href="#VVDocumenter" class="headerlink" title="VVDocumenter"></a><a href="https://github.com/onevcat/VVDocumenter-Xcode" target="_blank" rel="external">VVDocumenter</a></h3><p>喵神出品，必属精品。iOS开发大神<a href="http://onevcat.com/" target="_blank" rel="external">onevcat(人称喵神)</a>倾情奉献，分分钟生成API文档，与Apple Documention无缝对接，实乃SDK开发、底层API开发人员居家旅行之利器，你还在等什么！</p>
-<p><img src="https://raw.github.com/onevcat/VVDocumenter-Xcode/master/ScreenShot.gif" alt="Screenshot"></p>
-<h3 id="Peckham"><a href="#Peckham" class="headerlink" title="Peckham"></a><a href="https://github.com/markohlebar/Peckham" target="_blank" rel="external">Peckham</a></h3><p>拷贝代码忘记import头文件？代码写到上千行引入新类需要导入新类，<code>cmd+shift+f</code>找到这个类，拷贝头文件，然后回到原文件，滚动到顶部再导入。Peckham统统帮你搞定，<code>control+cmd+h</code>一键搞定(靠，明明是三键好不好)，麻麻再也不用担心我导入头文件。</p>
-<p><img src="https://raw.githubusercontent.com/markohlebar/Peckham/develop/Misc/Peckham.gif" alt="Peckham.gif"></p>
-<h3 id="Cocoapods-UI"><a href="#Cocoapods-UI" class="headerlink" title="Cocoapods-UI"></a><a href="https://github.com/kattrali/cocoapods-xcode-plugin" target="_blank" rel="external">Cocoapods-UI</a></h3><p>不要问我为什么不用酷酷的命令行，因为我懒，Cocoapods的UI工具拿去不谢。</p>
-<p><img src="https://github.com/kattrali/cocoadocs-xcode-plugin/raw/master/menu.png" alt="Menu"></p>
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>随着<code>APP</code>的功能越来越丰富，安装包的尺寸也在快速增长。像16G这种在往日非常大的存储空间，现在也越来越捉襟见肘，安装包的大小已经成为衡量<code>APP</code>质量的指标之一。分析iOS的安装包文件.ipa文件我们可以看到，图片资源在安装包中还是占了比较大的比重，通过减少图片的总尺寸可以达到我们的目的。方法有两个，一是压缩单张图片的尺寸，比较著名的有<a href="https://imageoptim.com/" target="_blank" rel="external">imageOptim</a>，二是减少图片的数量。实际上在我们的开发过程中，由于业务和设计的快速变化，导致工程中有许多冗余的图片资源。我们的目标就是找出并删除这些冗余的图片。为此，开发了工具<a href="https://github.com/wuwen1030/find-unused-images" target="_blank" rel="external"><code>UnusedImagesFinder</code></a>。</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>使用方法自然是相当简单的，打开你的Terminal，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python unused_images_finder.py PROJECT_PATH &#123;SOURCE_PATH&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>PROJECT_PATH</code>是你的工程文件的路径，也就是<code>.xcodeproj</code>文件的路径。<code>SOURCE_PATH</code>是一个可选参数，一般设置为工程的根目录，默认为<code>.xcodeproj</code>文件的上级目录。检查的结果写入到当前目录下的<code>result.txt</code>文件中。按照上述的步骤执行，如果在<code>result.txt</code>文件中发现一堆误杀的文件，这时你就需要注意了，可能你的代码不是以常规的<code>imageNamed:@&quot;xxx&quot;</code>的形式引用的。此时，我们需要修改我们的源文件了，打开<code>ununsed_images_finder</code>找到174行，看到如下的代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imageReferencePatterns = [re.compile(<span class="string">r".*imageNamed:@\"([^@\.]+)(@\dx)*(\.png|\.jpg)*\".*"</span>)]</span><br></pre></td></tr></table></figure>
+<p>根据工程中引用图片的方式可以定制正则表达式，加入数组或者替换掉即可。</p>
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><p>大致的实现思路如下：</p>
+<ul>
+<li><p><strong>找出图片资源</strong></p>
+<p>  在使用脚本中有一个参数是必填的，这个参数就是<code>.xcodeproj</code>，为什么一定要这个参数呢？因为在它的目录里有一个重要的文件<code>project.pbxproj</code>，这个文件包含了工程所有的构建信息，包括图片资源和编译源文件。打开<code>project.pbxproj</code>，找到<code>Begin PBXResourcesBuildPhase section</code>和<code>End PBXResourcesBuildPhase section</code>之间的内容，这里就是工程所引用的资源，这里有一些<code>plist</code>，还有我们想要找的图片文件。通过正则匹配，我们可以拿到图片的名称。最初的版本，我就是这么写的，运行结果出来后，发现有非常多的漏查。查找后发现，工程中部分图片被放到<code>.bundle</code>文件中，其中的文件并不会出现在<code>project.pbxproj</code>，类似的还有<code>image.xcasset</code>中的图片资源。所以在这里改变策略，遍历整个工程，找出所有图片。</p>
+</li>
+<li><p><strong>找出源文件</strong></p>
+<p>  有了图片的查找经验，找资源文件就很简单了，所有被编译的资源都在<code>project.pbxproj</code>里的<code>Begin PBXBuildFile section</code>和<code>End PBXBuildFile section</code>之间。为什么我们不是在遍历文件时找出所有源文件呢？因为我们有许多不好的习惯，很多时候没用的源文件只是简单地被从工程引用中移除，并没有被物理删除。如果我们把这部分文件也加进来，它们引用的图片将成为漏网之鱼。</p>
+</li>
+<li><p><strong>扫描未引用的图片资源</strong></p>
+<p>  有了上面两步的工作，第三步就比较简单了。遍历项目中的源文件，通过正则匹配的方式找到已引用的图片（注意，正则可能需要使用者补充，见使用方法），剩下的自然就是未被引用的资源了。</p>
+</li>
+</ul>
+<h3 id="已知问题和改进"><a href="#已知问题和改进" class="headerlink" title="已知问题和改进"></a>已知问题和改进</h3><p>当前存在的不足如下：</p>
+<ul>
+<li>目前不支持<code>Storyboard</code>和<code>xib</code></li>
+<li><p>引用如果没有直接使用文件名，无法检测出，比如</p>
+<pre><code class="objc"><span class="built_in">NSString</span> *imageName = <span class="string">@"imageName"</span>;
+<span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:imageName];
+...
+<span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"xxx%d"</span>, <span class="number">2</span>]]
+</code></pre>
+</li>
+<li><p>误杀</p>
+<ul>
+<li>Icon, Default 等文件不会直接被代码引用，查找的时候会被误杀</li>
+<li>问题二的文件同样会被误杀</li>
+</ul>
+</li>
+</ul>
+<p>未来改进的方向：</p>
+<ul>
+<li>改进上面的问题</li>
+<li>脚本集成到持续集成中</li>
+<li>提高检测率</li>
+</ul>
+<p><strong>最最最重要的一点，删除图片之前做好确认工作！</strong></p>
 
       
     </div>
@@ -313,17 +338,13 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/11/17/2014-11-17-shi-yong-calayerde-maskdong-hua/" rel="next" title="使用CALayer的mask动画">
-                <i class="fa fa-chevron-left"></i> 使用CALayer的mask动画
+              <a href="/2015/05/20/2015-05-20-at-ibdesignable-suo-jian-ji-suo-de-de-custom-view/" rel="next" title="@IBDesignable-所见即所得的Custom View">
+                <i class="fa fa-chevron-left"></i> @IBDesignable-所见即所得的Custom View
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/05/20/2015-05-20-at-ibdesignable-suo-jian-ji-suo-de-de-custom-view/" rel="prev" title="@IBDesignable-所见即所得的Custom View">
-                @IBDesignable-所见即所得的Custom View <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -349,8 +370,8 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/"
-           data-title="工欲善其事，必先利其器-我的XCode插件" data-url="http://yoursite.com/2015/01/05/2015-01-05-gong-yu-shan-qi-shi-,bi-xian-li-qi-qi-wo-de-xcodecha-jian/">
+      <div class="ds-thread" data-thread-key="2016/03/17/查找Xcode工程未使用的图片资源/"
+           data-title="查找Xcode工程未使用的图片资源" data-url="http://yoursite.com/2016/03/17/查找Xcode工程未使用的图片资源/">
       </div>
     
   </div>
@@ -449,7 +470,7 @@ KSImageNamed你是否曾为[UIImage imageNamed:]无法准确拼出图片名称�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#KSImageNamed"><span class="nav-number">1.</span> <span class="nav-text">KSImageNamed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VVDocumenter"><span class="nav-number">2.</span> <span class="nav-text">VVDocumenter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Peckham"><span class="nav-number">3.</span> <span class="nav-text">Peckham</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cocoapods-UI"><span class="nav-number">4.</span> <span class="nav-text">Cocoapods-UI</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现思路"><span class="nav-number">3.</span> <span class="nav-text">实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已知问题和改进"><span class="nav-number">4.</span> <span class="nav-text">已知问题和改进</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

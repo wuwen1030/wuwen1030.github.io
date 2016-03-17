@@ -216,6 +216,162 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/17/查找Xcode工程未使用的图片资源/" itemprop="url">
+                  查找Xcode工程未使用的图片资源
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-17T11:49:36+08:00" content="2016-03-17">
+              2016-03-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/17/查找Xcode工程未使用的图片资源/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/17/查找Xcode工程未使用的图片资源/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>随着<code>APP</code>的功能越来越丰富，安装包的尺寸也在快速增长。像16G这种在往日非常大的存储空间，现在也越来越捉襟见肘，安装包的大小已经成为衡量<code>APP</code>质量的指标之一。分析iOS的安装包文件.ipa文件我们可以看到，图片资源在安装包中还是占了比较大的比重，通过减少图片的总尺寸可以达到我们的目的。方法有两个，一是压缩单张图片的尺寸，比较著名的有<a href="https://imageoptim.com/" target="_blank" rel="external">imageOptim</a>，二是减少图片的数量。实际上在我们的开发过程中，由于业务和设计的快速变化，导致工程中有许多冗余的图片资源。我们的目标就是找出并删除这些冗余的图片。为此，开发了工具<a href="https://github.com/wuwen1030/find-unused-images" target="_blank" rel="external"><code>UnusedImagesFinder</code></a>。</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>使用方法自然是相当简单的，打开你的Terminal，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python unused_images_finder.py PROJECT_PATH &#123;SOURCE_PATH&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>PROJECT_PATH</code>是你的工程文件的路径，也就是<code>.xcodeproj</code>文件的路径。<code>SOURCE_PATH</code>是一个可选参数，一般设置为工程的根目录，默认为<code>.xcodeproj</code>文件的上级目录。检查的结果写入到当前目录下的<code>result.txt</code>文件中。按照上述的步骤执行，如果在<code>result.txt</code>文件中发现一堆误杀的文件，这时你就需要注意了，可能你的代码不是以常规的<code>imageNamed:@&quot;xxx&quot;</code>的形式引用的。此时，我们需要修改我们的源文件了，打开<code>ununsed_images_finder</code>找到174行，看到如下的代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imageReferencePatterns = [re.compile(<span class="string">r".*imageNamed:@\"([^@\.]+)(@\dx)*(\.png|\.jpg)*\".*"</span>)]</span><br></pre></td></tr></table></figure>
+<p>根据工程中引用图片的方式可以定制正则表达式，加入数组或者替换掉即可。</p>
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><p>大致的实现思路如下：</p>
+<ul>
+<li><p><strong>找出图片资源</strong></p>
+<p>  在使用脚本中有一个参数是必填的，这个参数就是<code>.xcodeproj</code>，为什么一定要这个参数呢？因为在它的目录里有一个重要的文件<code>project.pbxproj</code>，这个文件包含了工程所有的构建信息，包括图片资源和编译源文件。打开<code>project.pbxproj</code>，找到<code>Begin PBXResourcesBuildPhase section</code>和<code>End PBXResourcesBuildPhase section</code>之间的内容，这里就是工程所引用的资源，这里有一些<code>plist</code>，还有我们想要找的图片文件。通过正则匹配，我们可以拿到图片的名称。最初的版本，我就是这么写的，运行结果出来后，发现有非常多的漏查。查找后发现，工程中部分图片被放到<code>.bundle</code>文件中，其中的文件并不会出现在<code>project.pbxproj</code>，类似的还有<code>image.xcasset</code>中的图片资源。所以在这里改变策略，遍历整个工程，找出所有图片。</p>
+</li>
+<li><p><strong>找出源文件</strong></p>
+<p>  有了图片的查找经验，找资源文件就很简单了，所有被编译的资源都在<code>project.pbxproj</code>里的<code>Begin PBXBuildFile section</code>和<code>End PBXBuildFile section</code>之间。为什么我们不是在遍历文件时找出所有源文件呢？因为我们有许多不好的习惯，很多时候没用的源文件只是简单地被从工程引用中移除，并没有被物理删除。如果我们把这部分文件也加进来，它们引用的图片将成为漏网之鱼。</p>
+</li>
+<li><p><strong>扫描未引用的图片资源</strong></p>
+<p>  有了上面两步的工作，第三步就比较简单了。遍历项目中的源文件，通过正则匹配的方式找到已引用的图片（注意，正则可能需要使用者补充，见使用方法），剩下的自然就是未被引用的资源了。</p>
+</li>
+</ul>
+<h3 id="已知问题和改进"><a href="#已知问题和改进" class="headerlink" title="已知问题和改进"></a>已知问题和改进</h3><p>当前存在的不足如下：</p>
+<ul>
+<li>目前不支持<code>Storyboard</code>和<code>xib</code></li>
+<li><p>引用如果没有直接使用文件名，无法检测出，比如</p>
+<pre><code class="objc"><span class="built_in">NSString</span> *imageName = <span class="string">@"imageName"</span>;
+<span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:imageName];
+...
+<span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"xxx%d"</span>, <span class="number">2</span>]]
+</code></pre>
+</li>
+<li><p>误杀</p>
+<ul>
+<li>Icon, Default 等文件不会直接被代码引用，查找的时候会被误杀</li>
+<li>问题二的文件同样会被误杀</li>
+</ul>
+</li>
+</ul>
+<p>未来改进的方向：</p>
+<ul>
+<li>改进上面的问题</li>
+<li>脚本集成到持续集成中</li>
+<li>提高检测率</li>
+</ul>
+<p><strong>最最最重要的一点，删除图片之前做好确认工作！</strong></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/05/20/2015-05-20-at-ibdesignable-suo-jian-ji-suo-de-de-custom-view/" itemprop="url">
                   @IBDesignable-所见即所得的Custom View
                 </a>
@@ -750,7 +906,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
