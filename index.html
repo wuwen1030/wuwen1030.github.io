@@ -226,6 +226,168 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/23/WWDC2016之初识Xcode-Source-Editor-Extension/" itemprop="url">
+                  WWDC2016之初识Xcode Source Editor Extension
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-23T20:01:19+08:00" content="2016-06-23">
+              2016-06-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/23/WWDC2016之初识Xcode-Source-Editor-Extension/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/23/WWDC2016之初识Xcode-Source-Editor-Extension/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>以往Xcode插件开发在没有官方支持的情况下，基本处于处于刀耕火种的状态。虽然后来有了<a href="https://github.com/kattrali/Xcode-Plugin-Template" target="_blank" rel="external">Xcode-Plugin-Template</a>和各种dump好的头文件，我们仍然需要在没有文档的情况下做各种猜测和hook。关于插件的开发，可以看看<a href="https://onevcat.com/2013/02/xcode-plugin/" target="_blank" rel="external">这篇文章</a>。幸运的是苹果终于注意到了这一需求，并在<a href="https://developer.apple.com/videos/wwdc2016/" target="_blank" rel="external">WWDC2016</a>上发布这一新特性–<code>Xcode Source Editor Extension</code>。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>Xcode Source Editor Extension</code>，从字面意思理解就是Xcode源代码编辑器的一个扩展，事实上它的命名的确很好地反映了它的功能和定位。那么基于这项技术我们究竟能做什么呢？<a href="https://developer.apple.com/videos/play/wwdc2016/414/" target="_blank" rel="external">WWDC session 414</a>给我们的答案是：</p>
+<blockquote>
+<p>Add commands to the source editor</p>
+<p>Edit text</p>
+<p>Change selections</p>
+</blockquote>
+<p>给Xcode的代码编辑器扩展一些命令（在<code>Editor</code>菜单下增加额外的菜单），通过这些命令对源代码进行编辑（包括整个文件和选中的部分，这里的selection我起初不理解，后面做Demo就会理解了）。</p>
+<p>相比于以往的插件开发，<code>Xcode Source Editor Extension</code>具有以下特点：</p>
+<ul>
+<li>稳定。extension运行在其独立的进程中，插件的崩溃不会再引起Xcode的崩溃了。</li>
+<li>安全。extension拥有自己的sandBox，而且不会直接去操作Xcode工程，而是由Xcode将text以invocation的方式传递。</li>
+<li>快速。每个extension在Xcode启动后会即会被异步地以XPC的方式加载。</li>
+<li>简单。苹果提供了官方支持。</li>
+</ul>
+<p>此外，作为<code>App Extension</code>的一种，可在App Store发布，优秀的插件也可以为开发者增加收入。下面我们就跟着demo来探究如何实现一个<code>Xcode Source Editor Extension</code>。</p>
+<h3 id="工程创建"><a href="#工程创建" class="headerlink" title="工程创建"></a>工程创建</h3><p>我将创建一个为全部选中行添加注释的demo。根据官方指导，创建一个插件工程非常容易。首先我们创建一个<code>Cocoa Application</code>命名为”XTExtension”，接着在<code>Application Extension</code>中选中<code>Xcode Source Editor Extension</code>，命名为<code>XTComment</code>。<br><img src="https://raw.githubusercontent.com/wuwen1030/blogresources/master/extension_template.png" alt="extension template"><br>此时工程的<code>XTComment</code>目录下有两个文件<code>SourceEditorExtension.swift</code>和<code>SourceEditorCommand.swfit</code>，<code>SourceEditorExtension</code>用来管理extension的生命周期相关，<code>SourceEditorCommand</code>则用来处理具体的命令。Extension的加载和处理流程如下：<br><img src="https://raw.githubusercontent.com/wuwen1030/blogresources/master/flow.png" alt="flow"><br>Xcode的启动时候会记载所有的extension，并保证它们的生命周期。当用户点击选择命令按钮后，Xcode会以invocation的形式通知到extension，extension做出相应的处理并把处理结果回调给Xcode。<code>SourceEditorExtension.swift</code>的方法<code>extensionDidFinishLaunching</code>在extension被加载时调用，可以在这里做一些初始化的工作。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">extensionDidFinishLaunching</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// If your extension needs to do any work at launch, implement this optional method.</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Extension launched..."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="添加菜单"><a href="#添加菜单" class="headerlink" title="添加菜单"></a>添加菜单</h3><p>打开<code>Info.plist</code>，展开<code>NSExtension</code>至<code>XCSourceEditorCommandDefinitions</code>，命令菜单的定义如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>NSExtensionAttributes<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>XCSourceEditorCommandDefinitions<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XCSourceEditorCommandClassName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>$(PRODUCT_MODULE_NAME).SourceEditorCommand<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XCSourceEditorCommandIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>com.xt.APPlugins.AutoComment.SourceEditorCommand<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XCSourceEditorCommandName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">string</span>&gt;</span>Source Editor Command<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>XCSourceEditorExtensionPrincipalClass<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>$(PRODUCT_MODULE_NAME).SourceEditorExtension<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>XCSourceEditorCommandClassName</code>指向命令的处理类，该类实现<code>XCSourceEditorCommand</code>。</li>
+<li><code>XCSourceEditorCommandIdentifier</code>是命令的唯一标识，通常我们会对一组命令设置同一个<code>XCSourceEditorCommand</code>，在invocation中获取此标识做区分处理。</li>
+<li><code>XCSourceEditorCommandName</code>是命令在菜单栏展示的菜单名称。</li>
+</ul>
+<p>此外，菜单项是动态加载的，可以实现<code>SourceEditorExtension</code>的<code>commandDefinitions:</code>实现，但是这会覆盖掉<code>Info.plist</code>中的定义。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> commandDefinitions: [[<span class="type">XCSourceEditorCommandDefinitionKey</span>: <span class="type">AnyObject</span>]] &#123;</span><br><span class="line">    <span class="comment">// If your extension needs to return a collection of command definitions that differs from those in its Info.plist, implement this optional property getter.</span></span><br><span class="line">    <span class="keyword">return</span> [[.classNameKey: <span class="string">"SourceEditorCommand"</span>,</span><br><span class="line">             .identifierKey: <span class="string">"CustomIdentifier"</span>,</span><br><span class="line">             .nameKey: <span class="string">"CustomeName"</span>]]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Extension的菜单会默认加载在<code>Show Code Coverage</code>下。编译运行，选取Xcode-Beta作为Lanuching App，点击<code>Editor</code>，然而<code>Show Code Coverage</code>下空空如也，什么也没有。作为新主题，可查的资料实在太少，一度以为因为Xcode是Beta版的问题并打算放弃了。很偶然的一个机会在<a href="http://adcdownload.apple.com/WWDC_2016/Xcode_8_beta/Release_Notes_for_Xcode_8_beta.pdf" target="_blank" rel="external">Xcode 8.0 beta Release Notes</a>看到了这个问题的答案，WTF！</p>
+<blockquote>
+<p>To use Xcode Extensions on macOS 10.11 El Capitan, you must first launch Xcode and let it install additional system components. Then, in Terminal, run sudo /usr/libexec/xpccachectl.<br>Once the operation completes, restart your Mac. (26106213)</p>
+</blockquote>
+<h3 id="业务实现"><a href="#业务实现" class="headerlink" title="业务实现"></a>业务实现</h3><p>打开<code>SourceEditorCommand.swift</code>，实现<code>perform(with:completionHandler:)</code>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">perform</span><span class="params">(with invocation: XCSourceEditorCommandInvocation, completionHandler: <span class="params">(NSError?)</span></span></span> -&gt; <span class="type">Void</span> ) -&gt; <span class="type">Void</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> lineIndexes = [<span class="type">Int</span>]()</span><br><span class="line">    <span class="keyword">for</span> range <span class="keyword">in</span> invocation.buffer.selections &#123;</span><br><span class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> range = range <span class="keyword">as</span>? <span class="type">XCSourceTextRange</span> <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> start = range.start</span><br><span class="line">        <span class="keyword">let</span> end = range.end</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> start.line...end.line &#123;</span><br><span class="line">            lineIndexes.append(i)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    lineIndexes.<span class="built_in">reverse</span>()</span><br><span class="line">    <span class="keyword">for</span> lineNumber <span class="keyword">in</span> lineIndexes &#123;</span><br><span class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> line = invocation.buffer.lines[lineNumber] <span class="keyword">as</span>? <span class="type">NSString</span> <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> commentLine = <span class="type">NSString</span>(format: <span class="string">"// %@"</span>, line)</span><br><span class="line">        invocation.buffer.lines.insert(commentLine, at: lineNumber)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Implement your command here, invoking the completion handler when done. Pass it nil on success, and an NSError on failure.</span></span><br><span class="line">    completionHandler(<span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>invocation</code>的<code>buffer</code>提供了比较丰富的信息，包括文件的<code>lines</code>, <code>selections</code>, <code>indentationWidth</code>等等，具体作用可以查看<a href="https://developer.apple.com/videos/play/wwdc2016/414/" target="_blank" rel="external">WWDC视频</a>或者苹果的文档查看，在此就不一一介绍了。<br><img src="https://raw.githubusercontent.com/wuwen1030/blogresources/master/feature_show.png" alt="feature show"><br>此外，需要注意的一点是，苹果希望文本的编辑是快速流畅的，如果你的处理的文本时间过长苹果就会为用户提供一个取消的入口，这会触发invocation的<code>cancellationHandler</code>，所以在这里终止你的耗时的工作，否则你的extension可能不能正常地工作。最后，附上苹果的extension开发建议。</p>
+<blockquote>
+<p>Start up quickly</p>
+<p>Use GCD and follow standard asynchronous patterns</p>
+<p>Don’t replace the whole buffer if you don’t have to</p>
+<p>Handle cancellation quickly</p>
+</blockquote>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><code>Xcode Source Editor Extension</code>提供了一种官方Xcode插件开发方法，从上文可以看出，其所涉及的类和函数都很少，非常容易上手。同时，从目前来看，她的能力还相对较弱，一些复杂的如<a href="https://github.com/FuzzyAutocomplete/FuzzyAutocompletePlugin" target="_blank" rel="external">FuzzyAutocompletePlugin</a>还无法实现。但我相信很快会有优秀的插件来丰富Xcode功能和提升开发效率的。</p>
+<p><a href="https://github.com/wuwen1030/XTExtension" target="_blank" rel="external">Demo</a></p>
+<p>参考</p>
+<ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2016/414/" target="_blank" rel="external">WWDC session 414</a></li>
+<li><a href="https://github.com/cyanzhong/xTextHandler" target="_blank" rel="external">xTextHandler</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/17/查找Xcode工程未使用的图片资源/" itemprop="url">
                   查找Xcode工程未使用的图片资源
                 </a>
@@ -916,7 +1078,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
